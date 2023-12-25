@@ -1,11 +1,13 @@
 package com.hackerrank.restaurant.order;
 
 import com.hackerrank.restaurant.exceptions.EmptyOrderException;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import static java.util.stream.Collectors.toList;
+import java.util.stream.Collectors;
 
 public class PlaceOrder {
 
@@ -37,7 +39,11 @@ public class PlaceOrder {
      * @throws EmptyOrderException When there are no items in the order
      */
     public void placeOrder(long customerId, Order order) {
-
+        if (order.getItems().isEmpty())
+            throw new EmptyOrderException(String.format("Cannot place order (id: %s) with no items.", order.getId()));
+        if (orders.containsKey(customerId)) {
+            orders.get(customerId).add(order);
+        } else orders.put(customerId, new ArrayList<>(Arrays.asList(order)));
     }
 
     /**
@@ -46,7 +52,7 @@ public class PlaceOrder {
      * @return List of all the orders placed by the customer
      */
     public List<Order> getOrders(long customerId) {
-        return new ArrayList<>();
+        return orders.get(customerId);
     }
 
     /**
@@ -68,6 +74,10 @@ public class PlaceOrder {
      * </pre>
      */
     public String printOrders(long customerId) {
-        return "";
+        if (orders.containsKey(customerId)) {
+            return orders.get(customerId).stream()
+                    .map(Order::printOrder)
+                    .collect(Collectors.joining("\n-----\n"));
+        } else return "";
     }
 }

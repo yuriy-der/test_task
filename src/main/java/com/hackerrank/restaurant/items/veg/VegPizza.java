@@ -56,7 +56,7 @@ public class VegPizza extends Pizza {
      * @return The item category
      */
     public Category getCategory() {
-        return null;
+        return category;
     }
 
     /**
@@ -64,6 +64,6 @@ public class VegPizza extends Pizza {
      * @return The item container
      */
     public Container getContainer() {
-        return null;
+        return container;
     }
 }

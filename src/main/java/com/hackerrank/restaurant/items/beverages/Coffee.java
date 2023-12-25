@@ -57,7 +57,7 @@ public class Coffee extends HotBeverages {
      * @return The item category
      */
     public Category getCategory() {
-        return null;
+        return category;
     }
 
     /**
@@ -65,6 +65,6 @@ public class Coffee extends HotBeverages {
      * @return The item container
      */
     public Container getContainer() {
-        return null;
+        return container;
     }
 }

@@ -4,9 +4,13 @@ import com.hackerrank.restaurant.exceptions.BadQuantityException;
 import com.hackerrank.restaurant.exceptions.DuplicateItemEntryException;
 import com.hackerrank.restaurant.exceptions.NoSuchItemException;
 import com.hackerrank.restaurant.exceptions.NotEnoughItemException;
+import com.hackerrank.restaurant.inventory.Inventory;
 import com.hackerrank.restaurant.items.Item;
+
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Order {
     /**
@@ -19,7 +23,7 @@ public class Order {
      *
      * A map to keep track of all the items in the order and the quantity
      */
-    private final Map<Item, Integer> items;
+        private final Map<Item, Integer> items;
 
     /**
      *
@@ -48,7 +52,11 @@ public class Order {
      * @throws DuplicateItemEntryException When adding an existing item in the order
      */
     public void addItem(Item item, int quantity) {
-
+        if (quantity <= 0) throw new BadQuantityException(String.format("Expecting a value greater than zero but %s found.", quantity));
+        if (Inventory.inventory.getQuantity(item) == 0) throw new NoSuchItemException(String.format("Item '%s' is not available.", item.getName()));
+        if (items.containsKey(item)) throw new DuplicateItemEntryException(String.format("Cannot add duplicate item '%s'.", item.getName()));
+        Inventory.inventory.decrementQuantity(item, quantity);
+        items.put(item, quantity);
     }
 
     /**
@@ -57,7 +65,9 @@ public class Order {
      * @throws NoSuchItemException When the item is not available
      */
     public void removeItem(Item item) {
-
+        if (!items.containsKey(item)) throw new NoSuchItemException(String.format("Item '%s' is not available.", item.getName()));
+        Inventory.inventory.incrementQuantity(item, items.get(item));
+        items.remove(item);
     }
 
     /**
@@ -72,7 +82,10 @@ public class Order {
      * @throws NotEnoughItemException When the updated quantity is greater than the quantity in the inventory
      */
     public void incrementQuantity(Item item, int quantity) {
-
+        if (quantity <= 0) throw new BadQuantityException(String.format("Expecting a value greater than zero but %s found.", quantity));
+        if (!items.containsKey(item)) throw new NoSuchItemException(String.format("Item '%s' is not available.", item.getName()));
+        Inventory.inventory.decrementQuantity(item, quantity);
+        items.put(item, (items.getOrDefault(item, 0)) + quantity);
     }
 
     /**
@@ -87,7 +100,11 @@ public class Order {
      * @throws NotEnoughItemException When the updated quantity is less than zero
      */
     public void decrementQuantity(Item item, int quantity) {
-
+        if (quantity <= 0) throw new BadQuantityException(String.format("Expecting a value greater than zero but %s found.", quantity));
+        if (!items.containsKey(item)) throw new NoSuchItemException(String.format("Item '%s' is not available.", item.getName()));
+        if (items.get(item) < quantity) throw new NotEnoughItemException(String.format("Not enough quantity for the item '%s'.", item.getName()));
+        Inventory.inventory.incrementQuantity(item, quantity);
+        items.put(item, items.get(item) - quantity);
     }
 
     /**
@@ -112,6 +129,11 @@ public class Order {
      * </pre>
      */
     public String printOrder() {
-        return "";
+        return items.entrySet().stream()
+                .filter(e -> e.getValue() > 0)
+                .sorted(Comparator.comparing(entry -> entry.getKey().getName()))
+                .map(e -> String.format("%s %s $%.2f $%.2f", e.getKey().getName(), e.getValue(), e.getKey().getCost(), e.getKey().getCost() * e.getValue()))
+                .collect(Collectors.joining("\n"));
+
     }
 }

@@ -1,9 +1,10 @@
 package com.hackerrank.restaurant.items.beverages;
 
 import com.hackerrank.restaurant.items.Category;
+import com.hackerrank.restaurant.items.ColdBeverages;
 import com.hackerrank.restaurant.items.Container;
 
-public class Smoothie {
+public class Smoothie extends ColdBeverages {
     /**
      *
      * The item name

@@ -2,8 +2,9 @@ package com.hackerrank.restaurant.items.veg;
 
 import com.hackerrank.restaurant.items.Category;
 import com.hackerrank.restaurant.items.Container;
+import com.hackerrank.restaurant.items.Sandwich;
 
-public class VegBurger {
+public class VegBurger extends Sandwich {
     /**
      *
      * The item name

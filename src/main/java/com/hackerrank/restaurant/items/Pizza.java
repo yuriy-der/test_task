@@ -1,6 +1,6 @@
 package com.hackerrank.restaurant.items;
 
-public abstract class Pizza {
+public abstract class Pizza implements Item {
 
     /**
      *

@@ -1,6 +1,6 @@
 package com.hackerrank.restaurant.items;
 
-public abstract class ColdBeverages {
+public abstract class ColdBeverages implements Item{
 
     /**
      *

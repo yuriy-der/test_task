@@ -2,8 +2,9 @@ package com.hackerrank.restaurant.items.beverages;
 
 import com.hackerrank.restaurant.items.Category;
 import com.hackerrank.restaurant.items.Container;
+import com.hackerrank.restaurant.items.HotBeverages;
 
-public class Cider {
+public class Cider extends HotBeverages {
     /**
      *
      * The item name

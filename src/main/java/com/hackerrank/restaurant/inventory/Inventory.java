@@ -40,7 +40,9 @@ public class Inventory {
      * @throws DuplicateItemEntryException When adding an existing item in the inventory
      */
     public void addItem(Item item, int quantity) {
-
+        if (quantity <= 0) throw new BadQuantityException("Quantity cannot be less than or equal to zero");
+        if (itemsCount.containsKey(item)) throw new DuplicateItemEntryException("Cannot add existing item");
+        itemsCount.put(item, quantity);
     }
 
     /**
@@ -49,7 +51,8 @@ public class Inventory {
      * @throws NoSuchItemException When the item is not available
      */
     public void removeItem(Item item) {
-
+        if (!itemsCount.containsKey(item)) throw new NoSuchItemException("Item is not available");
+        itemsCount.remove(item);
     }
 
     /**
@@ -57,7 +60,7 @@ public class Inventory {
      * Remove all the items in the inventory
      */
     public void removeAllItems() {
-
+        itemsCount.clear();
     }
 
     /**
@@ -65,7 +68,7 @@ public class Inventory {
      * @return List of all the items in the inventory
      */
     public List<Item> getItems() {
-        return new ArrayList<>();
+        return new ArrayList<>(itemsCount.keySet());
     }
 
     /**
@@ -74,7 +77,7 @@ public class Inventory {
      * @return The quantity of the item
      */
     public int getQuantity(Item item) {
-        return 0;
+        return itemsCount.get(item);
     }
 
     /**
@@ -88,7 +91,9 @@ public class Inventory {
      * @throws NoSuchItemException When the item is not available
      */
     public void incrementQuantity(Item item, int quantity) {
-
+        if (quantity <= 0) throw new BadQuantityException("Quantity cannot be less than or equal to zero");
+        if (!itemsCount.containsKey(item)) throw new NoSuchItemException("Item is not available");
+        itemsCount.put(item, itemsCount.get(item) + quantity);
     }
 
     /**
@@ -103,6 +108,9 @@ public class Inventory {
      * @throws NotEnoughItemException When the updated quantity is less than zero
      */
     public void decrementQuantity(Item item, int quantity) {
-
+        if (quantity <= 0) throw new BadQuantityException("Quantity cannot be less than or equal to zero");
+        if (!itemsCount.containsKey(item)) throw new NoSuchItemException("Item is not available");
+        if (itemsCount.get(item) < quantity) throw new NotEnoughItemException("Updated quantity should not be less than zero");
+        itemsCount.put(item, itemsCount.get(item) - quantity);
     }
 }

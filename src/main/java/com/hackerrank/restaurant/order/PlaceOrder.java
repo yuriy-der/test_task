@@ -52,7 +52,7 @@ public class PlaceOrder {
      * @return List of all the orders placed by the customer
      */
     public List<Order> getOrders(long customerId) {
-        return orders.get(customerId);
+        return orders.containsKey(customerId) ? orders.get(customerId) : new ArrayList<>();
     }
 
     /**

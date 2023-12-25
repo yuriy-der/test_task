@@ -1,6 +1,9 @@
 package com.hackerrank.restaurant.menu;
 
+import com.hackerrank.restaurant.inventory.Inventory;
 import com.hackerrank.restaurant.items.Item;
+
+import java.util.stream.Collectors;
 
 public class Menu {
 
@@ -28,6 +31,9 @@ public class Menu {
      * </pre>
      */
     public String displayItems() {
-        return "";
+        return Inventory.inventory.getItems().stream()
+                .map(Item::getName)
+                .sorted()
+                .collect(Collectors.joining(", "));
     }
 }
